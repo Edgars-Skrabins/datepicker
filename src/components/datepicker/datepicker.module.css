@@ -1,0 +1,5 @@
+.datepicker{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(145, 145, 145, 0);
+}

@@ -1,0 +1,177 @@
+:root {
+    --c-bg-calendar: #9EC8B9;
+    --br-calendar: 0.3rem;
+
+    --c-bg-yearmonth: #5C8374;
+
+    --c-bg-btn-yearmonth: #72ab94;
+    --c-bg-btn-hover-yearmonth: #83ccaf;
+}
+
+body{
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.calendar__container {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    border-radius: var(--br-calendar);
+    background-color: var(--c-bg-calendar);
+
+    padding: 0.5rem;
+
+    width: 20rem;
+    min-height: 14rem;
+
+    flex-grow: 1;
+
+}
+
+.yearmonth {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    align-items: center;
+
+    text-align: center;
+
+    width: 100%;
+
+    background-color: var(--c-bg-yearmonth);
+    border-radius: 0.2rem;
+}
+
+.yearmonth__text {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.yearmonth__button {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bolder ;
+
+    padding: 0.5rem;
+    background-color: var(--c-bg-btn-yearmonth);
+    border-radius: 0.15rem;
+
+    width: 1rem;
+    height: 1rem;
+
+    margin: .5rem;
+    &:hover{
+        background-color: var(--c-bg-btn-hover-yearmonth);
+        cursor: pointer;
+    }
+}
+
+.yearmonth__button_left {
+
+}
+
+.yearmonth__button_right {
+
+}
+
+.days{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    justify-content: space-around;
+    text-align: center;
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.day{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.05rem;
+
+
+    padding: 0.2rem;
+
+    margin: 0;
+
+
+    width: 2rem;
+    height: 2rem;
+}
+
+.dates{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    justify-content: space-around;
+
+    gap: 0.2rem;
+
+    width: 100%;
+}
+
+.date{
+    display: flex;
+
+    justify-content: flex-end;
+
+    border-style: solid;
+    border-color: #000000;
+    border-width: 0.1rem;
+    padding: 0.2rem;
+
+    margin: 0;
+
+    width: 2rem;
+    height: 1rem;
+
+    border-radius: 0.18rem;
+
+    transition: 0.15s;
+
+    &:hover{
+        background-color: rgba(104, 222, 213, 0.51);
+        cursor: pointer;
+        border-radius: 0.3rem;
+    }
+}
+
+.date__empty{
+    display: flex;
+
+    justify-content: flex-end;
+
+    border-style: solid;
+    border-width: 0.1rem;
+    border-color: rgba(72, 72, 72, 0.04);
+    padding: 0.2rem;
+
+    margin: 0;
+
+    width: 2rem;
+    height: 1rem;
+}
+
+.date__now{
+    background-color: rgba(5, 253, 128, 0.62);
+}
+
+.date__selected{
+    background-color: rgba(3, 234, 255, 0.62);
+}
