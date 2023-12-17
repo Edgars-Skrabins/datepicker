@@ -18,9 +18,9 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, setInputDate, onUpdateC
 
     const [currentMonthIndex, setCurrentMonthIndex] = useState(getMonthNowIndex);
 
-    const [currentSelectedDate, setCurrentSelectedDate] = useState(0);
-    const [currentSelectedMonth, setCurrentSelectedMonth] = useState(0);
-    const [currentSelectedYear, setCurrentSelectedYear] = useState(0);
+    const [currentSelectedDate, setCurrentSelectedDate] = useState(newDate);
+    const [currentSelectedMonth, setCurrentSelectedMonth] = useState(newMonth);
+    const [currentSelectedYear, setCurrentSelectedYear] = useState(newYear);
 
     const [currentMonthName, setCurrentMonthName] = useState(getMonthNameByIndex(currentMonthIndex))
     const [currentYear, setCurrentYear] = useState(getYearNow());
@@ -94,14 +94,15 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, setInputDate, onUpdateC
 
     useEffect(() => {
         setCurrentMonthName(getMonthNameByIndex(currentMonthIndex));
-    }, [currentMonthIndex]);
-
-    useEffect(() => {
         redrawDateGrid();
     }, [currentYear, currentMonthIndex]);
 
     const handleDateClick = (element: number) => {
-        setInputDate(`${element}/${getMonthIndexByName(currentMonthName) + 1}/${currentYear}`)
+
+        const paddedDate = element.toString().padStart(2, '0');
+        const paddedMonth = (getMonthIndexByName(currentMonthName) + 1).toString().padStart(2, '0');
+
+        setInputDate(`${paddedDate}/${paddedMonth}/${currentYear}`);
 
         clearSelectionStyles();
 
@@ -139,7 +140,6 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, setInputDate, onUpdateC
                             alt='<-'
                             onClick={() => handleYearMonthNavigation(-1)}
                         />
-
                     </div>
 
                     <p className={styles.yearmonth__text}> {currentMonthName} {currentYear} </p>
@@ -169,7 +169,6 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, setInputDate, onUpdateC
                     {monthDates.length && monthDates.map((element: number) => (
                         <div key={Math.random()}>
                             {(() => {
-
                                 if (element === 0) {
                                     return <p className={styles.date__empty}></p>;
                                 } else if (element === getDateNow() &&

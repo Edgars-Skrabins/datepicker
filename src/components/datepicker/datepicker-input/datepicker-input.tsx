@@ -37,7 +37,6 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
             return;
         }
 
-
         const newCalendar: CalendarProps = {
             newDate: getDateNow(),
             newMonth: getMonthNowIndex(),
@@ -56,7 +55,7 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
         }
     }
 
-    const validateDate = () => {
+    const setDateThroughInput = () => {
         const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
         if (dateInput && datePattern.test(dateInput)) {
@@ -120,7 +119,7 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
                     ref={inputRef}
                     onChange={(e) => {
                         dateInput = e.currentTarget.value;
-                        validateDate();
+                        setDateThroughInput();
                     }}
                     onClick={handleInputClick}
                     onKeyDown={(e) => {
