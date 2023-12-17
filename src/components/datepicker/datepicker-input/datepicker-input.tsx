@@ -101,6 +101,8 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
 
     const updateCalendarCleared = (newCalendar: CalendarProps) => {
 
+        newCalendar.newMonth = newCalendar.newMonth - 1;
+
         const newCalendarArr: CalendarProps[] = [];
         newCalendarArr.push(newCalendar);
         setCurrentCalendar(newCalendarArr);
