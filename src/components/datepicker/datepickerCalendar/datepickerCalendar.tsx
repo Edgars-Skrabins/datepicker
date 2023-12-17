@@ -1,7 +1,7 @@
-import styles from "./datepicker-calendar.module.css"
+import styles from "./datepickerCalendar.module.css"
 import {useEffect, useState} from "react";
 
-import {CalendarProps} from "../datepicker-input/datepicker-input.tsx";
+import {CalendarProps} from "../datepickerInput/datepickerInput.tsx";
 
 import {
     months,

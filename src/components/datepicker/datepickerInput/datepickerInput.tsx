@@ -1,6 +1,6 @@
-import styles from "./datepicker-input.module.css"
+import styles from "./datepickerInput.module.css"
 import {useRef, useState} from "react";
-import DatepickerCalendar from "../datepicker-calendar/datepicker-calendar.tsx";
+import DatepickerCalendar from "../datepickerCalendar/datepickerCalendar.tsx";
 
 import {
     getMonthNowIndex,
