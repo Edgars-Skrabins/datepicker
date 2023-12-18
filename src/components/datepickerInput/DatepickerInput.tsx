@@ -1,28 +1,23 @@
-import styles from "./datepickerInput.module.css"
+import styles from "./DatepickerInput.module.css"
 import {useRef, useState} from "react";
-import DatepickerCalendar from "../datepickerCalendar/datepickerCalendar.tsx";
+import DatepickerCalendar from "../datepickerCalendar/DatepickerCalendar.tsx";
+import {CalendarProps} from "../datepickerCalendar/DatepickerCalendar.tsx";
 
 import {
     getMonthNowIndex,
     getYearNow,
     getDateNow,
-} from "../utility/dateUtility.ts";
+} from "../../utility/dateUtility.ts";
 
-export type CalendarProps = {
-    newDate: number,
-    newMonth: number,
-    newYear: number,
 
-    setInputDate: (date: string) => void;
-    onUpdateCalendar: (newCalendar: CalendarProps) => void;
-
-}
 
 export type DatepickerInputProps = {
     onDateUpdate: (date: string) => void,
+
+    isMondayFirst:boolean,
 }
 
-const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
+const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => {
 
     const [currentCalendar, setCurrentCalendar] = useState<CalendarProps[]>([]);
 
@@ -41,6 +36,7 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
             newDate: getDateNow(),
             newMonth: getMonthNowIndex(),
             newYear: getYearNow(),
+            isMondayFirst: isMondayFirst,
 
             setInputDate: setInputDate,
             onUpdateCalendar: updateCalendar,
@@ -75,6 +71,7 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
                 newDate: dateInt,
                 newMonth: monthInt,
                 newYear: yearInt,
+                isMondayFirst:isMondayFirst,
 
                 setInputDate: setInputDate,
                 onUpdateCalendar: updateCalendar,
@@ -123,7 +120,7 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
                     }}
                     onClick={handleInputClick}
                     onKeyDown={(e) => {
-                        // Allow numbers, "/", and backspace key; prevent others
+                        // Allow only numbers, "/", and backspace key
                         if (!/^\d$|^\/$/.test(e.key) && e.key !== 'Backspace') {
                             e.preventDefault();
                         }
@@ -131,12 +128,13 @@ const DatepickerInput = ({onDateUpdate}: DatepickerInputProps) => {
                 />
             </div>
 
-            {currentCalendar.map(({newDate, newMonth, newYear, setInputDate}) => (
+            {currentCalendar.map(({newDate, newMonth,isMondayFirst, newYear, setInputDate}) => (
                 <DatepickerCalendar
                     key={Math.random()}
                     newDate={newDate}
                     newMonth={newMonth}
                     newYear={newYear}
+                    isMondayFirst={isMondayFirst}
                     setInputDate={setInputDate}
                     onUpdateCalendar={updateCalendar}
                 />

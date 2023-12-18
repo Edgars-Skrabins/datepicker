@@ -31,7 +31,7 @@ export const getYearNow = (): number => {
 
 export const getDateNow = () => {
     const currentDate = new Date();
-    return currentDate.getMonth() + 1;
+    return currentDate.getDate();
 };
 
 export const getMonthNowIndex = (): number => {

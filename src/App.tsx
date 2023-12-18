@@ -1,13 +1,6 @@
 import './App.css'
-import Datepicker from "./components/datepicker/datepicker.tsx";
+import Datepicker from "./components/datepicker/Datepicker.tsx";
 
-const App = () => {
-
-  return (
-    <>
-      <Datepicker/>
-    </>
-  )
-}
+const App = () => <Datepicker/>;
 
 export default App
