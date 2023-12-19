@@ -1,78 +1,54 @@
 import styles from "./DatepickerCalendar.module.css"
 import {useEffect, useState} from "react";
+import DatepickerCalendarNavigation from "../datepickerCalendarNavigation/DatepickerCalendarNavigation.tsx";
+import DateContainer from "../dateContainer/DateContainer.tsx";
 
 import {
-    months,
     getMonthIndexByName,
-    getMonthNowIndex,
-    getDaysOfMonthNow,
+    getCurrentMonthIndex,
+    getDaysOfCurrentMonth,
     getMonthNameByIndex,
     getYearNow,
-    getDateNow,
-    getFirstDayOfMonthNow
-} from "../../utility/dateUtility.ts";
-import DatepickerCalendarNavigation from "../datepickerCalendar-navigation/DatepickerCalendar-Navigation.tsx";
+    getFirstDayOfCurrentMonth, daysMonFirst, daysSunFirst
+} from "../../utils/dateUtils.ts";
 
 export type CalendarProps = {
-    newDate: number,
-    newMonth: number,
-    newYear: number,
-    isMondayFirst:boolean,
-
+    dateInputValue: number,
+    monthInputValue: number,
+    yearInputValue: number,
+    isMondayFirst: boolean,
     setInputDate: (date: string) => void;
     onUpdateCalendar: (newCalendar: CalendarProps) => void;
-
 }
 
-const daysSunFirst = [
-    'Su',
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-]
+export type DateInfo = {
+    currentSelectedDate: number,
+    currentSelectedMonth: number,
+    currentSelectedYear: number,
+    currentMonthName: string,
+    currentYear: number,
+}
 
-const daysMonFirst = [
-    'Mo',
-    'Tu',
-    'We',
-    'Th',
-    'Fr',
-    'Sa',
-    'Su',
-]
+const DatepickerCalendar = ({
+                                dateInputValue,
+                                monthInputValue,
+                                yearInputValue,
+                                isMondayFirst,
+                                setInputDate,
+                                onUpdateCalendar,
+                            }: CalendarProps) => {
 
-const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInputDate, onUpdateCalendar}: CalendarProps) => {
+    const [currentMonthIndex, setCurrentMonthIndex] = useState(getCurrentMonthIndex);
 
-    const [currentMonthIndex, setCurrentMonthIndex] = useState(getMonthNowIndex);
-
-    const [dateInfo, setDateInfo] = useState({
-        currentSelectedDate: newDate,
-        currentSelectedMonth: newMonth,
-        currentSelectedYear: newYear,
+    const [dateInfo, setDateInfo] = useState<DateInfo>({
+        currentSelectedDate: dateInputValue,
+        currentSelectedMonth: monthInputValue,
+        currentSelectedYear: yearInputValue,
         currentMonthName: getMonthNameByIndex(currentMonthIndex),
         currentYear: getYearNow()
     });
 
     const [monthDates, setMonthDates] = useState<number[]>([]);
-
-    const handleYearMonthNavigation = (direction: number) => {
-
-        const indexOutOfRange: boolean = currentMonthIndex + direction > months.length - 1;
-        const indexBelowZero: boolean = currentMonthIndex + direction < 0;
-
-        if (indexOutOfRange) {
-            setCurrentMonthIndex(0);
-            incrementYear();
-        } else if (indexBelowZero) {
-            setCurrentMonthIndex(months.length - 1);
-            decrementYear()
-        } else {
-            setCurrentMonthIndex(currentMonthIndex + direction);
-        }
-    }
 
     const dateGridSize = 42;
     const redrawDateGrid = () => {
@@ -82,21 +58,19 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInput
 
         for (let i = 0; i < dateGridSize; i++) {
 
-            let isBelowFirstDate:boolean;
-            let isOutsideMonthDateRange:boolean;
+            let isBelowFirstDate: boolean;
+            let isOutsideMonthDateRange: boolean;
 
-            if(isMondayFirst)
-            {
-                isBelowFirstDate = i < getFirstDayOfMonthNow(dateInfo.currentYear, currentMonthIndex) - 1;
+            if (isMondayFirst) {
+                isBelowFirstDate = i < getFirstDayOfCurrentMonth(dateInfo.currentYear, currentMonthIndex) - 1;
                 isOutsideMonthDateRange =
-                    i > getDaysOfMonthNow(dateInfo.currentYear, currentMonthIndex) +
-                    getFirstDayOfMonthNow(dateInfo.currentYear, currentMonthIndex) - 2;
-            }
-            else{
-                isBelowFirstDate = i < getFirstDayOfMonthNow(dateInfo.currentYear, currentMonthIndex);
+                    i > getDaysOfCurrentMonth(dateInfo.currentYear, currentMonthIndex) +
+                    getFirstDayOfCurrentMonth(dateInfo.currentYear, currentMonthIndex) - 2;
+            } else {
+                isBelowFirstDate = i < getFirstDayOfCurrentMonth(dateInfo.currentYear, currentMonthIndex);
                 isOutsideMonthDateRange =
-                    i > getDaysOfMonthNow(dateInfo.currentYear, currentMonthIndex) +
-                    getFirstDayOfMonthNow(dateInfo.currentYear, currentMonthIndex) - 1;
+                    i > getDaysOfCurrentMonth(dateInfo.currentYear, currentMonthIndex) +
+                    getFirstDayOfCurrentMonth(dateInfo.currentYear, currentMonthIndex) - 1;
             }
 
             if (isBelowFirstDate || isOutsideMonthDateRange) {
@@ -136,15 +110,15 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInput
     const updateCalendarOnInput = () => {
         setDateInfo(prevDateInfo => ({
             ...prevDateInfo,
-            currentSelectedDate: newDate,
-            currentYear: newYear
+            currentSelectedDate: dateInputValue,
+            currentYear: yearInputValue
         }));
-        setCurrentMonthIndex(newMonth);
+        setCurrentMonthIndex(monthInputValue);
     }
 
     useEffect(() => {
         updateCalendarOnInput();
-    }, [newDate, newYear, newMonth]);
+    }, [dateInputValue, yearInputValue, monthInputValue]);
 
     const updateCalendarOnCalendarNavigationInput = () => {
         setDateInfo(prevDateInfo => ({
@@ -159,13 +133,10 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInput
     }, [dateInfo.currentYear, currentMonthIndex]);
 
     const handleDateClick = (element: number) => {
-
         const paddedDate = element.toString().padStart(2, '0');
         const paddedMonth = (getMonthIndexByName(dateInfo.currentMonthName) + 1).toString().padStart(2, '0');
 
         setInputDate(`${paddedDate}/${paddedMonth}/${dateInfo.currentYear}`);
-
-        clearSelectionStyles();
 
         setDateInfo(prevDateInfo => ({
             ...prevDateInfo,
@@ -175,35 +146,25 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInput
         }));
 
         onUpdateCalendar({
-            newDate: element,
-            newMonth: currentMonthIndex,
-            newYear: dateInfo.currentYear,
+            dateInputValue: element,
+            monthInputValue: currentMonthIndex,
+            yearInputValue: dateInfo.currentYear,
             isMondayFirst: isMondayFirst,
             setInputDate: setInputDate,
             onUpdateCalendar: onUpdateCalendar,
         });
     }
 
-    const clearSelectionStyles = () => {
-        const allSelected = document.querySelectorAll(`.${styles.date__selected}`);
-        const selectedArray = Array.from(allSelected);
-
-        selectedArray.forEach((e) => {
-            e.classList.remove(styles.date__selected);
-        });
-    };
-
     return (
         <>
             <div className={styles.calendar__container}>
-
                 <DatepickerCalendarNavigation
                     monthName={dateInfo.currentMonthName}
                     year={dateInfo.currentYear}
-                    onLeftArrowClick={() => handleYearMonthNavigation(-1)}
-                    onRightArrowClick={() => handleYearMonthNavigation(1)}
+                    onDecrementYear={decrementYear}
+                    onIncrementYear={incrementYear}
+                    onCurrentMonthIndexChange={setCurrentMonthIndex}
                 />
-
                 <div className={styles.days}>
                     {isMondayFirst
                         ? daysMonFirst.map((day) => (
@@ -214,37 +175,14 @@ const DatepickerCalendar = ({newDate, newMonth, newYear, isMondayFirst, setInput
                         ))}
                 </div>
 
-
                 <div className={styles.dates}>
                     {monthDates.length && monthDates.map((currentDateIteration: number) => (
-                        <div key={Math.random()}>
-                            {(() => {
-                                const isSelected = currentDateIteration === dateInfo.currentSelectedDate &&
-                                    getMonthIndexByName(dateInfo.currentMonthName) === dateInfo.currentSelectedMonth &&
-                                    dateInfo.currentYear === dateInfo.currentSelectedYear;
-
-                                return (
-                                    <p
-                                        className={`${styles.date} 
-                                            ${isSelected ? styles.date__selected : ''} 
-                                            ${currentDateIteration === 0 ? styles.date__empty : ''} 
-                                            ${
-                                            currentDateIteration === getDateNow() &&
-                                            dateInfo.currentYear === getYearNow() &&
-                                            dateInfo.currentMonthName === months[getMonthNowIndex()]
-                                                ? styles.date__now
-                                                : ''
-                                        }`}
-                                        onClick={(e) => {
-                                            handleDateClick(currentDateIteration);
-                                            e.currentTarget.classList.add(styles.date__selected);
-                                        }}
-                                    >
-                                        {currentDateIteration !== 0 && currentDateIteration}
-                                    </p>
-                                );
-                            })()}
-                        </div>
+                        <DateContainer
+                            key={Math.random()}
+                            dateInfo={dateInfo}
+                            currentDateIteration={currentDateIteration}
+                            onHandleDateClick={handleDateClick}
+                        />
                     ))}
                 </div>
             </div>

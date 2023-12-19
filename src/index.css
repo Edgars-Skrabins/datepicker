@@ -1,8 +1,26 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 
+    --c-bg-calendar: #9EC8B9;
+    --br-calendar: 0.3rem;
+
+    --c-bg-yearmonth: #5C8374;
+    --c-bg-btn-yearmonth: #72ab94;
+    --c-bg-btn-hover-yearmonth: #83ccaf;
+
+    --c-date-hover: rgba(104, 222, 213, 0.51);
+    --c-date-now: rgba(5, 253, 128, 0.62);
+    --c-date-selected: rgba(3, 234, 255, 0.62);
+
+    --c-body-bg: #9a97a4;
+    --c-body-text: black;
+    --font-body-size: 16px;
 }
 
-body{
-  background-color: #9a97a4;
+body {
+    background-color: var(--c-body-bg);
+
+    color: var(--c-body-text);
+    font-weight: bold;
+    font-size: var(--font-body-size);
 }

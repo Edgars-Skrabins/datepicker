@@ -1,3 +1,23 @@
+export const daysSunFirst = [
+    'Su',
+    'Mo',
+    'Tu',
+    'We',
+    'Th',
+    'Fr',
+    'Sa',
+]
+
+export const daysMonFirst = [
+    'Mo',
+    'Tu',
+    'We',
+    'Th',
+    'Fr',
+    'Sa',
+    'Su',
+]
+
 export const months: string[] = [
     'January',
     'February',
@@ -18,14 +38,12 @@ export const getMonthNameByIndex = (index: number): string => {
 }
 
 export const getMonthIndexByName = (monthName: string): number => {
-    const month = months.indexOf(monthName)
-    return month;
+    return months.indexOf(monthName);
 }
 
 export const getYearNow = (): number => {
     const currentTimestamp = Date.now();
     const currentDate = new Date(currentTimestamp);
-
     return currentDate.getFullYear();
 }
 
@@ -34,18 +52,16 @@ export const getDateNow = () => {
     return currentDate.getDate();
 };
 
-export const getMonthNowIndex = (): number => {
+export const getCurrentMonthIndex = (): number => {
     const currentTimestamp = Date.now();
     const currentDate = new Date(currentTimestamp);
-
     return currentDate.getMonth();
 }
 
-export const getDaysOfMonthNow = (year: number, currentMonthIndex: number) => {
+export const getDaysOfCurrentMonth = (year: number, currentMonthIndex: number) => {
     return new Date(year, currentMonthIndex + 1, 0).getDate();
 }
 
-export const getFirstDayOfMonthNow = (year: number, currentMonthIndex: number) => {
+export const getFirstDayOfCurrentMonth = (year: number, currentMonthIndex: number) => {
     return new Date(year, currentMonthIndex, 1).getDay();
 }
-

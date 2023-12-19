@@ -1,23 +1,15 @@
 import styles from "./DatepickerInput.module.css"
 import {useRef, useState} from "react";
-import DatepickerCalendar from "../datepickerCalendar/DatepickerCalendar.tsx";
-import {CalendarProps} from "../datepickerCalendar/DatepickerCalendar.tsx";
+import DatepickerCalendar, {CalendarProps} from "../datepickerCalendar/DatepickerCalendar.tsx";
 
-import {
-    getMonthNowIndex,
-    getYearNow,
-    getDateNow,
-} from "../../utility/dateUtility.ts";
-
-
+import {getDateNow, getCurrentMonthIndex, getYearNow,} from "../../utils/dateUtils.ts";
 
 export type DatepickerInputProps = {
     onDateUpdate: (date: string) => void,
-
-    isMondayFirst:boolean,
+    isMondayFirst: boolean,
 }
 
-const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => {
+const DatepickerInput = ({onDateUpdate, isMondayFirst}: DatepickerInputProps) => {
 
     const [currentCalendar, setCurrentCalendar] = useState<CalendarProps[]>([]);
 
@@ -33,9 +25,9 @@ const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => 
         }
 
         const newCalendar: CalendarProps = {
-            newDate: getDateNow(),
-            newMonth: getMonthNowIndex(),
-            newYear: getYearNow(),
+            dateInputValue: getDateNow(),
+            monthInputValue: getCurrentMonthIndex(),
+            yearInputValue: getYearNow(),
             isMondayFirst: isMondayFirst,
 
             setInputDate: setInputDate,
@@ -68,10 +60,10 @@ const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => 
             }
 
             const newCalendar: CalendarProps = {
-                newDate: dateInt,
-                newMonth: monthInt,
-                newYear: yearInt,
-                isMondayFirst:isMondayFirst,
+                dateInputValue: dateInt,
+                monthInputValue: monthInt,
+                yearInputValue: yearInt,
+                isMondayFirst: isMondayFirst,
 
                 setInputDate: setInputDate,
                 onUpdateCalendar: updateCalendar,
@@ -85,19 +77,18 @@ const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => 
     const updateCalendar = (newCalendar: CalendarProps) => {
 
         if (currentCalendar.length > 0) {
-            onDateUpdate(`${newCalendar.newDate}/${newCalendar.newMonth+ 1}/${newCalendar.newYear}`);
+            onDateUpdate(`${newCalendar.dateInputValue}/${newCalendar.monthInputValue + 1}/${newCalendar.yearInputValue}`);
             return;
         }
 
         const newCalendarArr: CalendarProps[] = [];
         newCalendarArr.push(newCalendar);
-
         setCurrentCalendar(newCalendarArr);
     }
 
     const updateCalendarCleared = (newCalendar: CalendarProps) => {
 
-        newCalendar.newMonth = newCalendar.newMonth - 1;
+        newCalendar.monthInputValue = newCalendar.monthInputValue - 1;
 
         const newCalendarArr: CalendarProps[] = [];
         newCalendarArr.push(newCalendar);
@@ -128,12 +119,12 @@ const DatepickerInput = ({onDateUpdate,isMondayFirst}: DatepickerInputProps) => 
                 />
             </div>
 
-            {currentCalendar.map(({newDate, newMonth,isMondayFirst, newYear, setInputDate}) => (
+            {currentCalendar.map(({dateInputValue, monthInputValue, isMondayFirst, yearInputValue, setInputDate}) => (
                 <DatepickerCalendar
                     key={Math.random()}
-                    newDate={newDate}
-                    newMonth={newMonth}
-                    newYear={newYear}
+                    dateInputValue={dateInputValue}
+                    monthInputValue={monthInputValue}
+                    yearInputValue={yearInputValue}
                     isMondayFirst={isMondayFirst}
                     setInputDate={setInputDate}
                     onUpdateCalendar={updateCalendar}
